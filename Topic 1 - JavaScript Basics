@@ -1,1 +1,338 @@
+# CS.355 ✨ JavaScript Basics
+
+## JavaScript
+- JavaScript is a **multiparadigm** language:
+  - Event-driven
+  - Functional
+  - Object-oriented
+
+---
+
+## Compiled vs Interpreted
+
+| Compiled | Interpreted |
+|----------|-------------|
+| C / C++  | Python      |
+| Rust     | PHP         |
+
+**Note:** Compiler optimizations are what make your code run fast.
+
+---
+
+## Optimization Examples
+
+```js
+let x = 0;
+while (x < 1_000_000)
+    x++;
+print(x);
+
+// Compiler optimization -> directly:
+print(1000000);
+```
+
+### Dead Code Elimination
+```js
+DEBUG_MODE = false;
+
+if (DEBUG_MODE) {
+    x = calc(x);
+    y = calc(y);
+}
+```
+
+### Micro vs Macro Optimization
+```js
+let x = 1;
+for (let i = 0; i < 1_000_000; i++) {
+    x = x * 2;     // normal
+    x = x << 1;    // optimized with bit shift
+}
+```
+
+---
+
+## JavaScript Execution Model
+JavaScript is **both interpreted and compiled**.
+
+This is done via **Just-In-Time (JIT) Compilation** in the V8 engine:
+- Interpreter: Ignition
+- Compiler: Turbofan
+
+### Usage
+- **Node.js** → Server-side (backend)
+- **JavaScript** → Browser (frontend)
+
+---
+
+## JS Primitives (7)
+- Number (IEEE 754 Double Precision Float)
+- String
+- Boolean
+- Undefined
+- Null
+- BigInt (not discussed)
+- Symbol (not discussed)
+
+---
+
+### Number Examples
+```js
+0.1 + 0.2;
+// 0.30000000000000004
+
+Number.MAX_SAFE_INTEGER;   // 9007199254740991
+Number.MIN_SAFE_INTEGER;   // -9007199254740991
+```
+
+- 32-bit int range: ± 2,100,000,000  
+- 64-bit int range: much larger
+
+---
+
+### String Examples
+```js
+typeof 0.2;   // "number"
+typeof 0.1;   // "number"
+
+let x = 5, y = 7;
+console.log(`x = ${x}, y+1 = ${y+1}`);
+// Output: "x = 5, y+1 = 8"
+```
+
+---
+
+### Boolean Examples
+```js
+let x;
+console.log(x);   // undefined
+```
+
+---
+
+## Undefined vs Null
+- **undefined**: declared, but uninitialized value  
+- **null**: explicit declaration that a value does not exist or does not make sense
+
+```js
+let donna = { emp_id: 15, supervisor: "Eric" };
+let eric = { emp_id: 12, supervisor: "Mary" };
+let derek = { emp_id: 60, supervisor: undefined };
+let mary = { emp_id: 1, supervisor: null };
+let joe = { emp_id: 30, supervisor: "null" };
+```
+
+⚠️ `undefined` → value not assigned  
+⚠️ `null` → intentional "no value"  
+⚠️ `"null"` → string `"null"`, not the same as null  
+
+---
+
+## Primitive vs Object Wrappers
+- Primitives don’t have methods by default  
+- JavaScript wraps them temporarily into **object wrappers** when needed:
+  - Number, String, Boolean
+
+This is called **syntactic sugar**.
+
+```js
+'hello'.length  // works because of object wrapper
+```
+
+---
+
+## Classes
+- You don’t have to define classes in JavaScript explicitly
+
+```js
+let myFraction = { num: 3, den: 4 };
+```
+
+---
+
+## Functions
+- Most important part of JavaScript
+- Functions are **first-class citizens**
+- Functions can be assigned to variables
+
+```js
+let mySum = function(x, y) {
+    return x + y;
+};
+
+mySum(3,4,5); // 12
+```
+
+### Higher Order Functions
+```js
+function square(x) {
+    return x * x;
+}
+
+[1, 2, 3, 4, 5, 6, 7].map(square);
+```
+
+### Object with Function Property
+```js
+const myFraction = {
+    num: 3,
+    den: 4,
+    toDecimal: function() { return this.num / this.den; }
+};
+
+myFraction.toDecimal();   // 0.75
+myFraction.num = 5;
+myFraction.toDecimal();   // 1.25
+```
+
+---
+
+## Function Declarations
+```js
+var x = function square(a) { return a * a; };
+
+x(25);  // 625
+x(100); // 10000
+```
+
+```js
+var mySum = function(a, b) { return a + b; };
+mySum(100, 50); // 150
+```
+
+---
+
+
+---
+
+## Function Declarations
+- Available anywhere inside the file
+
+```js
+function mySum(a, b) {
+    return a + b;
+}
+mySum(5,6);
+```
+
+---
+
+## Function Expressions
+- Can call recursively
+- Work after defined but not before
+
+```js
+const mySum = function(a, b) { return a + b; };
+mySum(5,6);
+
+(function(a,b){ return a+b; })(25,5);
+// 30
+```
+
+- Function variable does not need to be assigned to a variable, but it can
+
+---
+
+## Arrow Functions
+```js
+const mySum = (a, b) => a + b;
+const sq = x => x * x;
+const zero = () => 0;
+```
+
+### Multiple Arrow Functions (avoid)
+```js
+const sumOfSquares = (a, b) => {
+    let aa = sq(a);
+    let bb = sq(b);
+    return mySum(aa, bb);
+};
+```
+
+---
+
+## Example: Create Employee Object
+```js
+// Input: 3
+// Output: { employee_id: 3 }
+
+const create_employee = EMPID => ({ employee_id: EMPID });
+
+create_employee(3);
+// { employee_id: 3 }
+```
+
+### Arrow Functions and Objects
+- Arrow functions don’t refer to parent object
+
+```js
+const myFrac = {
+    num: 3,
+    den: 4,
+    toDecimal: function() { return this.num / this.den; }
+};
+
+const myFrac2 = {
+    num: 3,
+    den: 4,
+    toDecimal: () => this.num / this.den
+};
+```
+
+---
+
+## Destructuring Assignment
+```js
+let downloaded = { a:5, b:7, c:5, d:"str", e:103 };
+let { a, c, e } = downloaded;
+
+console.log(a);
+console.log(b);
+console.log(c);
+```
+
+- In APIs, destructuring helps pick only what you need.
+
+---
+
+## Spread and Rest Operators
+
+### Spread Operator
+- Converts from array-like to parameter list
+
+```js
+Math.max(5,9,10,2,3,5,100,11);
+Math.max(...downloaded); // NaN
+
+let a = [1,2,9];
+let b = [7,8,9];
+let c = [...a, 4, 5, 6, ...b];
+```
+
+### Rest Operator
+```js
+Math.max(1,2,4,5,100,99,98,50);
+
+function myMax(...nums) {
+    let maxCan = nums[0];
+    for (let i=1; i<nums.length; i++) {
+        if(nums[i] > maxCan)
+            maxCan = nums[i];
+    }
+    return maxCan;
+}
+
+function mySum(...nums) {
+    let result = 0;
+    for (let i=0; i<nums.length; i++) {
+        result += nums[i];
+    }
+    return result;
+}
+
+mySum(5,5,5,5,5,255);
+// 555
+```
+
+---
 
