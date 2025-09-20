@@ -1,10 +1,10 @@
-# CS.355 ✨ JavaScript Basics
+# CS.355 ✨ JavaScript Basics ✨
 
 ## JavaScript
 - JavaScript is a **multiparadigm** language:
-  - Event-driven
+  - Event-Driven
   - Functional
-  - Object-oriented
+  - Object-Oriented
 
 ---
 
@@ -15,7 +15,7 @@
 | C / C++  | Python      |
 | Rust     | PHP         |
 
-**Note:** Compiler optimizations are what make your code run fast.
+**Note:** Compiler optimizations (under the hood) are what makes your code run fast.
 
 ---
 
@@ -23,7 +23,7 @@
 
 ```js
 let x = 0;
-while (x < 1_000_000)
+while (x < 1,000,000)
     x++;
 print(x);
 
@@ -33,15 +33,16 @@ print(1000000);
 
 ### Dead Code Elimination
 ```js
-DEBUG_MODE = false;
+DEBUG_MODE = false;  // Compiler would say you have this false
 
-if (DEBUG_MODE) {
+if (DEBUG_MODE) {   // So this will never run 
     x = calc(x);
     y = calc(y);
 }
 ```
 
 ### Micro vs Macro Optimization
+- When you think about optimization, you have to think about in the grand scheme of things, not micro-optimization
 ```js
 let x = 1;
 for (let i = 0; i < 1_000_000; i++) {
